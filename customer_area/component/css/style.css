@@ -1,0 +1,149 @@
+/************************************* index page ******************************************/
+/* body  */
+body{
+    font-family: "Roboto",Arial, Helvetica, sans-serif;
+    font-size: 14px;
+    line-height: 1.42857143;
+    color: #333333;
+    background-color: #f0f0f0;
+}
+/* end body */
+
+/* Top start */
+#top{
+    background-color: #555555;
+    padding: 10px 0;
+}
+#top .offer{
+     color: #fff;
+}
+/* btn style */
+#top .offer .btn{
+    text-transform: uppercase;
+}
+@media(max-width:991px)
+{
+    #top .offer{
+        margin-bottom: 10px;
+    }
+}
+@media(max-width:991px)
+{
+    #top{
+        font-size: 12px;
+        text-align: center;
+    }
+}
+#top a{
+    color:#fff;
+}
+/* menu style */
+#top ul.menu{
+    padding-top: 5px;
+    margin: 0;
+    text-align: center;
+    font-size: 12px;
+    list-style: none;
+}
+#top ul.menu > li{
+    display: inline-block;
+}
+@media(max-width: 991px){
+    #top ul.menu{
+        text-align: center;
+    }
+}
+#top ul.menu > li a{
+    color: #eeeeee;
+}
+#top ul.menu > li + li:before{
+  content: '|\00a0';
+  padding: 0 5px;
+  color:#f7f7f7;
+}
+/* End Top css */
+
+/*Navbar css start*/
+.navbar{
+    border-bottom-right-radius: 10px;
+    border-bottom-left-radius: 10px;
+}
+.navbar ul.nav > li > a:hover{
+    background:#e7e7e7;
+}
+.btn-primary{
+    color: rgb(255,255,255);
+    background-color: rgb(79,191,168);
+    border-color: rgb(65,179,156);
+}
+#search{
+    clear: both;
+    border-top: solid 1px #9abacd;
+}
+#search form{
+    float: right;
+}
+/*End Navbar css*/
+
+/*Start slider*/
+#myslider .carousel-inner .carousel-item img{
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 450px;
+}
+@media(max-width: 991px){
+   #myslider .carousel-inner .carousel-item img{
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 200px;
+   }
+}
+/*End slider*/
+
+/*Start Featured box*/
+#Featured .shadow{
+    border-radius: 5px;
+    height: 100%;
+}
+/*End Featured box*/
+
+/*hot box */
+.card .card-body .card-title a{
+    color: rgb(85,85,85);
+}
+#hotbox .card{
+    height: 100%;
+}
+/*end hot box*/
+
+/*Start footer*/
+#footer{
+    background-color: #e0e0e0;
+}
+#footer ol,ul{
+    list-style: none;
+}
+#footer li a{
+    color: #696969;
+}
+#icons a{
+    width: 30px;
+    height: 30px;
+    font-size: 100%;
+    text-decoration: none;
+    text-align: center;
+    color: white;
+    display: inline-block;
+    border-radius: 50%;
+    background-color: #A0A0A0;
+    line-height: 30px;
+    transform: all 0.2s ;
+}
+#icons a:hover{
+     color: red;
+}
+/*End footer*/
+
+/************************************ Shop page  *******************************************/
