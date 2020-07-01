@@ -1,3 +1,38 @@
+<?php #require_once('includes/db.php');
+      require_once('functions/functions.php');
+ ?>
+ <?php
+				if(isset($_GET['pro_id']))
+				{	
+					$pro_id = $_GET['pro_id'];
+					$get_pro = "SELECT * FROM products WHERE product_id = '$pro_id'";
+					$run = $conn->query($get_pro);
+					$row = $run->fetch_array();
+					$product_title=$row['product_title'];
+				    $p_cat_id=$row['p_cat_id'];
+				    $cat_id=$row['cat_id'];
+				    $product_price=$row['product_price'];
+				    $product_desc=$row['product_desc'];
+				    $img1 =$row['product_img1'];
+				    $img2 =$row['product_img2'];
+				    $img3 =$row['product_img3'];
+				    $get_pcat = "SELECT * FROM product_categories WHERE p_cat_id = '$p_cat_id'";
+				    $run1 = $conn->query($get_pcat);
+				    $row1 = $run1->fetch_array();
+				    $p_cat_id=$row1['p_cat_id'];
+				    $p_cat_title=$row1['p_cat_title'];
+				}
+				else{
+					// if($_GET['pro_id'] == ''){
+					// 	header("location:shop.php");
+					// }
+					//echo"<script>window.open(,'_self')</script>";
+
+						// $pro_id = $_GET['pro_id'];
+						// echo"<script>window.open('details.php?pro_id=$pro_id','_self')</script>";
+				
+				}
+?>
 <!DOCTYPE html>
 <html>
 <head>
@@ -27,7 +62,14 @@
                             <a href="shop.php" class="nav-link active">Shop</a>
                         </li>
                         <li class="nav-item"> 
-                            <a href="checkout" class="nav-link">My Account</a>
+                              <?php
+                            if(!isset($_SESSION['customer_email']))
+                            {
+                                echo "<a href='checkout.php' class='nav-link'>My Account</a>";
+                            }else{
+                                echo "<a href='customer_area/my_account.php?my_order' class='nav-link'>My Account</a>";
+                            }
+                          ?>
                         </li>
                         <li class="nav-item"> 
                             <a href="card.php" class="nav-link">Shopping card</a>
@@ -44,9 +86,9 @@
                      </ul>
                 </div>
                   
-                <button class="btn btn-primary btn-sm mr-sm-3">
-                    <i class="fa fa-shopping-cart"></i> <span>4 Items In Card</span>
-                </button>
+                <a href="card.php" class="btn btn-primary btn-sm mr-sm-3">
+                    <i class="fa fa-shopping-cart"></i>  <span><?php item(); ?> Items In Card</span>
+                </a>
                            
                 <button class="btn btn-primary btn-sm "  data-toggle="collapse" data-target="#search">
                     <i class="fa fa-search"></i>
@@ -73,7 +115,7 @@
 				<ul class="breadcrumb mt-3 shadow-sm  bg-light"> 
 					<li><a href="index.php" class="breadcrumb-item">Home</a></li>
 					<li class="ml-3 "><a href="shop.php" class="breadcrumb-item">Shop</a></li>
-					<li class="ml-3 active">details</li>
+					<li class="ml-3 active"><?php echo $p_cat_title; ?></li>
 				</ul>	
 			</div>
 		</div>
@@ -90,6 +132,7 @@
 			<!--############# Side bar End ##################-->
 
 			<!--############# detail Show section Start ##################-->
+			
 			<div class="col-md-9">
 				<div class="container mt-2 mt-md-0">
 					<div class="row p-2">
@@ -105,15 +148,15 @@
 				                 <div class="carousel-inner">
 				                    <!-- 1st slider -->
 				                     <div class="carousel-item active">
-				                         <img src="img/1.jpg" class="img-thumbnail" >
+				                         <img src='admin_area/product_img/<?php echo$img1?>' class='img-fluid card-img-top'>
 				                     </div>
 				                      <!-- 2nd slider -->
 				                     <div class="carousel-item">
-				                         <img src="img/2.jpg" class="img-thumbnail" >
+				                        <img src='admin_area/product_img/<?php echo$img2?>' class='img-fluid card-img-top'>
 				                     </div>
 				                      <!-- 3th slider -->
 				                     <div class="carousel-item">
-				                         <img src="img/3.jpg" class="img-thumbnail" >
+				                         <img src='admin_area/product_img/<?php echo$img3?>' class='img-fluid card-img-top'>
 				                     </div>
 				                 </div>
 				                 <a href="#myslider" class="carousel-control-prev" role="button" data-slide="prev">
@@ -131,16 +174,16 @@
 						 	<!-- col 2 -->
 						 <div class="col-md-6 mt-3">
 						 	<div class="">
+						 		<?php  addCard(); ?>
 						 		<!-- card title -->
-						 		<div class="text-center"><h2>White Polo Shirt</h2></div>
+						 		<div class="text-center"><h2><?php echo $product_title; ?></h2></div>
 						 		<!-- form -->
-						 		<form class=" p-2">
+						 		<form class="p-2" method="POST" action="details.php?add_card=<?php echo $pro_id; ?>">
 						 				<div class="form-group">
 						 					<div class="row">
 							 					<label class="col-sm-4">Product Quantity :</label>
-							 					<select class="form-control col-sm-7">
-							 						<option>Select</option>
-												    <option>1</option>
+							 					<select class="form-control col-sm-7" required="required" name="qty">
+							 						<option>1</option>
 												    <option>2</option>
 												    <option>3</option>
 												    <option>4</option>
@@ -151,8 +194,7 @@
 						 				<div class="form-group">
 						 					<div class="row"> 
 							 					<label class="col-sm-4">Product Size :</label>
-							 					<select class="form-control col-sm-7">
-							 						<option>Select</option>
+							 					<select class="form-control col-sm-7" required="required" name="size">
 												    <option>Small</option>
 												    <option>Medium</option>
 												    <option>Large</option>
@@ -160,22 +202,25 @@
 												</select>
 						 					</div>
 						 				</div>
+
+						 				<div class="text-center">
+						 					<!-- <input type="hidden" name="pro_price" value="<?php echo $product_price; ?>"> -->
+											<h2 >INR <?php echo $product_price; ?></h2><br>
+											<button class="btn btn-primary btn-sm" type="submit">
+												<i class="fa fa-shopping-cart mr-2"></i> Add To Card
+											</button>
+										</div>
 						 		</form>
-								<div class="text-center">
-									<h2>INR 199</h2>
-									<button class="btn btn-primary btn-sm">
-										<i class="fa fa-shopping-cart mr-2"></i> Add To Card
-									</button>
-								</div>
+								
 								<div class="row mt-2 p-2">
 									<div class="col-sm-4 mt-md-0 mt-2">
-										<img src="img/1.jpg" class="img-fluid">
+										 <img src='admin_area/product_img/<?php echo$img1?>' class='img-fluid card-img-top'>
 									</div>
 									<div class="col-sm-4 mt-md-0 mt-2">
-										<img src="img/2.jpg" class="img-fluid">
+										 <img src='admin_area/product_img/<?php echo$img2?>' class='img-fluid card-img-top'>
 									</div>
 									<div class="col-sm-4 mt-md-0 mt-2">
-										<img src="img/3.jpg" class="img-fluid">
+										 <img src='admin_area/product_img/<?php echo$img3?>' class='img-fluid card-img-top'>
 									</div>
 								</div>
 						 	</div>
@@ -187,12 +232,8 @@
 				<div class="container mt-3 p-4">
 					<div>
 						<h3>Product Details</h3>
-						<p class="text-justify">The Python Tutorial
-							Python is an easy to learn powerful programming language. it has efficient
-							highlevel data structures and a simple but effective approach to object-oriented
-							programming python`s elegant syntax and dynamic typing together with its
-							interpreted nature, make it an ideal language for scripting and rapid application
-							development in many areas on most platforms.
+						<p class="text-justify">
+							<?php echo $product_desc; ?>
 						</p>
 						<h5>Size </h5>
 						<ol>
@@ -207,48 +248,31 @@
 				<div class="container">
 					<h3 class="text-center">You Also Like These Product</h3>
 					<div class="row">
-						 <!-- card 1 -->
-				            <div class="col-md-4 col-sm-6 my-1">
-				                <div class="card">
-				                    <img src="img/card1.png" class="card-img-top">
-				                    <div class="card-body text-center">
-				                        <h5 class="card-title "><a href="#">White Polo Shirt</a></h5>
-				                        <p class="card-text">INR 199</p>
-				                        <p class="btn-group ">
-				                          <a href="details.php" class="btn btn-outline-secondary btn-sm">View Details</a>  
-				                          <a href="#" class="btn btn-outline-primary btn-sm"><i class="fa fa-shopping-cart mr-2"></i>Add to card</a>
-				                        </p>
-				                    </div>
-				                </div>
-				            </div>
-				             <!-- card 1 -->
-				            <div class="col-md-4 col-sm-6 my-1">
-				                <div class="card">
-				                    <img src="img/card1.png" class="card-img-top">
-				                    <div class="card-body text-center">
-				                        <h5 class="card-title "><a href="#">White Polo Shirt</a></h5>
-				                        <p class="card-text">INR 199</p>
-				                        <p class="btn-group ">
-				                          <a href="details.php" class="btn btn-outline-secondary btn-sm">View Details</a>  
-				                          <a href="#" class="btn btn-outline-primary btn-sm"><i class="fa fa-shopping-cart mr-2"></i>Add to card</a>
-				                        </p>
-				                    </div>
-				                </div>
-				            </div>
-				             <!-- card 1 -->
-				            <div class="col-md-4 col-sm-6 my-1">
-				                <div class="card">
-				                    <img src="img/card1.png" class="card-img-top">
-				                    <div class="card-body text-center">
-				                        <h5 class="card-title "><a href="#">White Polo Shirt</a></h5>
-				                        <p class="card-text">INR 199</p>
-				                        <p class="btn-group ">
-				                          <a href="details.php" class="btn btn-outline-secondary btn-sm">View Details</a>  
-				                          <a href="#" class="btn btn-outline-primary btn-sm"><i class="fa fa-shopping-cart mr-2"></i>Add to card</a>
-				                        </p>
-				                    </div>
-				                </div>
-				            </div>
+						<?php 
+							$like_pro = "SELECT * FROM products WHERE p_cat_id = '$p_cat_id' ORDER BY 1 DESC LIMIT 0,4";
+							$run2 = $conn->query($like_pro);
+							while ($row2 = $run2->fetch_array()) {
+								$pro_id = $row2['product_id'];
+								$pro_title = $row2['product_title'];
+								$pro_price = $row2['product_price'];
+								$pro_img1 = $row2['product_img1'];
+								echo "<div class='col-md-3 col-sm-6 my-1'>
+						                <div class='card'>
+						                    <img src='admin_area/product_img/$pro_img1' class='img-fluid card-img-top'>
+						                    <div class='card-body text-center'>
+						                        <h5 class=card-title ><a href='details.php?pro_id=$pro_id'>$pro_title</a></h5>
+						                        <p class='card-text'>INR $pro_price </p>
+						                        <p class='btn-group'>
+						                          <a href='details.php?pro_id=$pro_id' class='btn btn-outline-secondary btn-sm'>View Details</a>  
+						                          <a href='details.php?pro_id=$pro_id' class='btn btn-outline-primary btn-sm'><i class='fa fa-shopping-cart mr-2'></i>Add to card</a>
+						                        </p>
+						                    </div>
+						                </div>
+						            </div>";
+								}
+						?>
+						
+				         
 					</div>
 				</div>
 				<!-- end like product -->

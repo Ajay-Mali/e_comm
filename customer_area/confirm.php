@@ -3,6 +3,15 @@
     <head>
         <title>E commerce Store</title>
         <?php include('includes/csslinks.php') ?>
+        <?php 
+          if (!isset($_SESSION['customer_email'])) {
+            echo "<script>window.open('../checkout.php','_self')</script>";
+          }else{
+             // if (isset($_GET['o_id'])) {
+              $o_id = $_GET['o_id'];
+              $run_order = $conn->query("SELECT * FROM customer_order WHERE order_id = '$o_id'");
+              $row_o = $run_order->fetch_assoc();
+        ?>
     </head>
     <body>
   <!--######################################### Top Bar Start  ######################################-->
@@ -45,7 +54,7 @@
                 </div>
                   
                 <button class="btn btn-primary btn-sm mr-sm-3">
-                    <i class="fa fa-shopping-cart"></i> <span>4 Items In Card</span>
+                    <i class="fa fa-shopping-cart"></i>  <span><?php item(); ?> Items In Card</span>
                 </button>
                            
                 <button class="btn btn-primary btn-sm "  data-toggle="collapse" data-target="#search">
@@ -94,40 +103,59 @@
                				<h1 class="text-center">Please Confirm Your Payment</h1>
                			</div>
                			<div class="card-body">
-               				<form enctype="multipart/form-data">
+               				<form action="confirm.php?update_id=<?php echo $o_id ?>" method="POST" enctype="multipart/form-data">
 			                    <div class="form-group ">
 			                        <label class="">Invoice Number :</label>
-			                        <input type="text" name="" class="form-control">
+			                        <input type="text" name="invoice_no" value="<?php echo $row_o['invoice_no'] ?>" class="form-control" readonly="" >
 			                    </div>
 			                    <div class="form-group">
-			                        <label class="">Ammount :</label>
-			                        <input type="text" name="" class="form-control">
+			                        <label class="">Amount :</label>
+			                        <input type="text" name="amount" value="<?php echo $row_o['due_amount'] ?>"  class="form-control" readonly="readonly">
 			                    </div>
 			                     <div class="form-group">
 			                        <label class="">Select Payment Mode :</label>
-			                        <select class="form-control">
-			                        	<option>Bank Transfer</option>
-			                        	<option>PayPal</option>
-			                        	<option>PayuMoney</option>
-			                        	<option>Paytm</option>
+			                        <select class="form-control" name="pay_type" required="">
+			                        	<option value="bank_tra">Bank Transfer</option>
+			                        	<option value="paypal">PayPal</option>
+			                        	<option value="payumoney">PayuMoney</option>
+			                        	<option value="paytm">Paytm</option>
 			                        </select>
 			                    </div>
 			                    <div class="form-group">
 			                        <label class="">Transection Number :</label>
-			                        <input type="text" name="" class="form-control">
+			                        <input type="text" name="tra_no" class="form-control" required="">
 			                    </div>
 			                    <div class="form-group">
 			                        <label class="">Payment Date :</label>
-			                        <input type="date" name="" class="form-control">
+			                        <input type="date" name="pay_date" class="form-control" required="">
 			                    </div>
 			                    <center>
-			                        <button type="submit" class="btn btn-primary mt-2">
+			                        <button type="submit" name="pay" class="btn btn-primary mt-2">
 			                            <i class="fa fa-user mr-1"></i> Confirm Payment
 			                        </button>
 			                    </center>
 			                </form>
                			</div>
+                    <?php
 
+                      if (isset($_POST['pay'])) {
+                        $up_c_id = $_GET['update_id'];
+                        $invoice_no = $_POST['invoice_no'];
+                        $amount = $_POST['amount'];
+                        $pay_type = $_POST['pay_type'];
+                        $tra_no = $_POST['tra_no'];
+                        $pay_date = $_POST['pay_date'];
+                        $complete = "complete";
+
+                        $run1 = $conn->query("INSERT INTO payments (`invoice_no`, `amount`, `payment_mode`, `ref_no`, `payment_date`) VALUES ('$invoice_no','$amount','$pay_type','$tra_no','$pay_date')");
+
+                        $run2 = $conn->query("UPDATE customer_order SET order_status = '$complete' WHERE order_id = '$up_c_id'");
+
+                        echo "<script>alert('Your Order has Been Received...')</script>";
+                        echo "<script>window.open('my_account.php?my_order','_self')</script>";
+
+                      }
+                    ?>
                		</div>
                </div>
             </div>
@@ -148,3 +176,9 @@
        </script>
     </body>
 </html>
+<?php }
+// }else{
+//       echo "<script>window.open('my_account.php?my_order','_self')</script>";
+//     }
+//   } 
+?>

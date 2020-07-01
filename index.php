@@ -1,8 +1,11 @@
+<?php require_once('includes/db.php');
+      require_once('functions/functions.php');
+ ?>
 <!DOCTYPE html>
 <html>
     <head>
         <title>E commerce Store</title>
-        <?php include('includes/csslinks.php') ?>
+        <?php include('includes/csslinks.php'); ?>
     </head>
     <body>
   <!--######################################### Top Bar Start  ######################################-->
@@ -27,7 +30,14 @@
                             <a href="shop.php" class="nav-link">Shop</a>
                         </li>
                         <li class="nav-item"> 
-                            <a href="customer_area/my_account.php" class="nav-link">My Account</a>
+                          <?php
+                            if(!isset($_SESSION['customer_email']))
+                            {
+                                echo "<a href='checkout.php' class='nav-link'>My Account</a>";
+                            }else{
+                                echo "<a href='customer_area/my_account.php?my_order' class='nav-link'>My Account</a>";
+                            }
+                          ?>
                         </li>
                         <li class="nav-item"> 
                             <a href="card.php" class="nav-link">Shopping card</a>
@@ -44,9 +54,9 @@
                      </ul>
                 </div>
                   
-                <button class="btn btn-primary btn-sm mr-sm-3">
-                    <i class="fa fa-shopping-cart"></i> <span>4 Items In Card</span>
-                </button>
+                <a href="card.php" class="btn btn-primary btn-sm mr-sm-3">
+                    <i class="fa fa-shopping-cart"></i>  <span><?php item(); ?> Items In Card</span>
+                </a>
                            
                 <button class="btn btn-primary btn-sm "  data-toggle="collapse" data-target="#search">
                     <i class="fa fa-search"></i>
@@ -74,19 +84,28 @@
                      <li data-target="#myslider" data-slide-to="1"></li>
                      <li data-target="#myslider" data-slide-to="2"></li>
                  </ol>
-                 <div class="carousel-inner">
-                    <!-- 1st slider -->
-                     <div class="carousel-item active">
-                         <img src="img/1.jpg" >
-                     </div>
-                      <!-- 2nd slider -->
-                     <div class="carousel-item">
-                         <img src="img/2.jpg" >
-                     </div>
-                      <!-- 3th slider -->
-                     <div class="carousel-item">
-                         <img src="img/3.jpg" >
-                     </div>
+                  <div class="carousel-inner">
+                    <?php
+                      $get_slider = "SELECT * FROM slider LIMIT 0,1";
+                      $run_slider= mysqli_query($conn,$get_slider);
+                      while ($row = mysqli_fetch_array($run_slider)) {
+                        $imgs = $row['slider_img'];
+                        echo ' <div class="carousel-item active">
+                         <img src="admin_area/slider_img/'.$imgs.'" >
+                     </div>' ;
+                      }
+                     ?>
+                     <?php
+                      $get_slider = "SELECT * FROM slider LIMIT 1,6";
+                      $run_slider= mysqli_query($conn,$get_slider);
+                      while ($row = mysqli_fetch_array($run_slider)) {
+                        $imgs = $row['slider_img'];
+                        echo '<div class="carousel-item">
+                         <img src="admin_area/slider_img/'.$imgs.'" >
+                     </div>';
+                      }
+                     ?>
+                  
                  </div>
                  <a href="#myslider" class="carousel-control-prev" role="button" data-slide="prev">
                        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
@@ -98,9 +117,10 @@
                  </a>
             </div>
         </div>
+        
 <!--######################################### Slider End  ######################################-->
 
-<!--######################################### Featured box Start  ######################################-->
+<!--############################### Featured box Start  ######################################-->
     <div class="container my-3" id="Featured">
         <div class="row">
             
@@ -156,127 +176,9 @@
     </div>
     <div class="container" id="hotbox">
         <div class="row">
-            <!-- card 1 -->
-            <div class="col-md-3 col-sm-6  my-1">
-                <div class="card">
-                    <img src="img/card1.png" class="card-img-top">
-                    <div class="card-body text-center">
-                        <h5 class="card-title"><a href="#" id="protitle">White Polo Shirt</a></h5>
-                        <p class="card-text">INR 199</p>
-                        <p class="btn-group ">
-                          <a href="#" class="btn btn-outline-secondary btn-sm">View Details</a>  
-                          <a href="#" class="btn btn-outline-primary btn-sm"><i class="fa fa-shopping-cart mr-2"></i>Add to card</a>
-                        </p>
-                    </div>
-                </div>
-            </div>
-
-            <!-- card 1 -->
-            <div class="col-md-3 col-sm-6 my-1">
-                <div class="card">
-                    <img src="img/card1.png" class="card-img-top">
-                    <div class="card-body text-center">
-                        <h5 class="card-title "><a href="#">White Polo Shirt</a></h5>
-                        <p class="card-text">INR 199</p>
-                        <p class="btn-group ">
-                          <a href="#" class="btn btn-outline-secondary btn-sm">View Details</a>  
-                          <a href="#" class="btn btn-outline-primary btn-sm"><i class="fa fa-shopping-cart mr-2"></i>Add to card</a>
-                        </p>
-                    </div>
-                </div>
-            </div>
-
-            <!-- card 1 -->
-            <div class="col-md-3 col-sm-6 my-1">
-                <div class="card">
-                    <img src="img/card1.png" class="card-img-top">
-                    <div class="card-body text-center">
-                        <h5 class="card-title "><a href="#">White Polo Shirt</a></h5>
-                        <p class="card-text">INR 199</p>
-                        <p class="btn-group ">
-                          <a href="#" class="btn btn-outline-secondary btn-sm">View Details</a>  
-                          <a href="#" class="btn btn-outline-primary btn-sm"><i class="fa fa-shopping-cart mr-2"></i>Add to card</a>
-                        </p>
-                    </div>
-                </div>
-            </div>
-            
-            <!-- card 1 -->
-            <div class="col-md-3 col-sm-6 my-1">
-                <div class="card">
-                    <img src="img/card1.png" class="card-img-top">
-                    <div class="card-body text-center">
-                        <h5 class="card-title "><a href="#">White Polo Shirt</a></h5>
-                        <p class="card-text">INR 199</p>
-                        <p class="btn-group ">
-                          <a href="#" class="btn btn-outline-secondary btn-sm">View Details</a>  
-                          <a href="#" class="btn btn-outline-primary btn-sm"><i class="fa fa-shopping-cart mr-2"></i>Add to card</a>
-                        </p>
-                    </div>
-                </div>
-            </div>
-            
-            <!-- card 1 -->
-            <div class="col-md-3 col-sm-6  my-1">
-                <div class="card">
-                    <img src="img/card1.png" class="card-img-top">
-                    <div class="card-body text-center">
-                        <h5 class="card-title "><a href="#">White Polo Shirt</a></h5>
-                        <p class="card-text">INR 199</p>
-                        <p class="btn-group ">
-                          <a href="#" class="btn btn-outline-secondary btn-sm">View Details</a>  
-                          <a href="#" class="btn btn-outline-primary btn-sm"><i class="fa fa-shopping-cart mr-2"></i>Add to card</a>
-                        </p>
-                    </div>
-                </div>
-            </div>
-
-            <!-- card 1 -->
-            <div class="col-md-3 col-sm-6 my-1">
-                <div class="card">
-                    <img src="img/card1.png" class="card-img-top">
-                    <div class="card-body text-center">
-                        <h5 class="card-title "><a href="#">White Polo Shirt</a></h5>
-                        <p class="card-text">INR 199</p>
-                        <p class="btn-group ">
-                          <a href="#" class="btn btn-outline-secondary btn-sm">View Details</a>  
-                          <a href="#" class="btn btn-outline-primary btn-sm"><i class="fa fa-shopping-cart mr-2"></i>Add to card</a>
-                        </p>
-                    </div>
-                </div>
-            </div>
-
-            <!-- card 1 -->
-            <div class="col-md-3 col-sm-6 my-1">
-                <div class="card">
-                    <img src="img/card1.png" class="card-img-top">
-                    <div class="card-body text-center">
-                        <h5 class="card-title "><a href="#">White Polo Shirt</a></h5>
-                        <p class="card-text">INR 199</p>
-                        <p class="btn-group ">
-                          <a href="#" class="btn btn-outline-secondary btn-sm">View Details</a>  
-                          <a href="#" class="btn btn-outline-primary btn-sm"><i class="fa fa-shopping-cart mr-2"></i>Add to card</a>
-                        </p>
-                    </div>
-                </div>
-            </div>
-            
-            <!-- card 1 -->
-            <div class="col-md-3 col-sm-6 my-1">
-                <div class="card">
-                    <img src="img/card1.png" class="card-img-top">
-                    <div class="card-body text-center">
-                        <h5 class="card-title "><a href="#">White Polo Shirt</a></h5>
-                        <p class="card-text">INR 199</p>
-                        <p class="btn-group ">
-                          <a href="#" class="btn btn-outline-secondary btn-sm">View Details</a>  
-                          <a href="#" class="btn btn-outline-primary btn-sm"><i class="fa fa-shopping-cart mr-2"></i>Add to card</a>
-                        </p>
-                    </div>
-                </div>
-            </div>
-            
-
+          <?php
+            getPro();
+          ?>
         </div>
     </div>
 <!--######################################### hot box End  ######################################-->

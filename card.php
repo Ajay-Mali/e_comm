@@ -1,4 +1,8 @@
-<!DOCTYPE html>
+
+<?php require_once('includes/db.php');
+      require_once('functions/functions.php');
+ ?>
+ <!DOCTYPE html>
 <html>
 <head>
 	<title>E commerce Store</title>
@@ -33,7 +37,14 @@
                             <a href="shop.php" class="nav-link ">Shop</a>
                         </li>
                         <li class="nav-item"> 
-                            <a href="checkout" class="nav-link">My Account</a>
+                               <?php
+                            if(!isset($_SESSION['customer_email']))
+                            {
+                                echo "<a href='checkout.php' class='nav-link'>My Account</a>";
+                            }else{
+                                echo "<a href='customer_area/my_account.php?my_order' class='nav-link'>My Account</a>";
+                            }
+                          ?>
                         </li>
                         <li class="nav-item"> 
                             <a href="card.php" class="nav-link active">Shopping card</a>
@@ -50,9 +61,9 @@
                      </ul>
                 </div>
                   
-                <button class="btn btn-primary btn-sm mr-sm-3">
-                    <i class="fa fa-shopping-cart"></i> <span>4 Items In Card</span>
-                </button>
+                <a href="card.php" class="btn btn-primary btn-sm mr-sm-3">
+                    <i class="fa fa-shopping-cart"></i>  <span><?php item(); ?> Items In Card</span>
+                </a>
                            
                 <button class="btn btn-primary btn-sm "  data-toggle="collapse" data-target="#search">
                     <i class="fa fa-search"></i>
@@ -93,9 +104,9 @@
             <!-- col-1 -->
             <div class="col-md-9">
                 <div id="showcards" class="card border-0 p-3">
-                    <form>
+                    <form action="card.php" method="post" enctype="multipart-form-data">
                         <h1>Shopping Cards</h1>
-                        <p class="text-muted">Currently you have 4 item`s in your card</p>
+                        <p class="text-muted">Currently you have <?php item(); ?> item`s in your card</p>
 
                         <table class="table table-responsive">
                             <thead >
@@ -109,40 +120,44 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr>
-                                    <td><img src="img/1.jpg" ></td>
-                                    <td>White Polo Shirt</td>
-                                    <td>2</td>
-                                    <td>INR 199</td>
-                                    <td>Small</td>
-                                    <td><input type="checkbox" name="remove[]"></td>
-                                    <td>INR 398</td>
-                                </tr>
-                                <tr>
-                                    <td><img src="img/1.jpg" ></td>
-                                    <td>White Polo Shirt height:t height:</td>
-                                    <td>2</td>
-                                    <td>INR 199</td>
-                                    <td>Small</td>
-                                    <td><input type="checkbox" name="remove[]"></td>
-                                    <td>INR 398</td>
-                                </tr>
-                                <tr>
-                                    <td><img src="img/1.jpg" ></td>
-                                    <td>White Polo Shirt</td>
-                                    <td>2</td>
-                                    <td>INR 199</td>
-                                    <td>Small</td>
-                                    <td><input type="checkbox" name="remove[]"></td>
-                                    <td>INR 398</td>
-                                </tr>
+                                <?php 
+                                    $ip_add = getUserIp();
+                                    $total = 0;
+                                    $sql_price = "SELECT * FROM card WHERE ip_add = '$ip_add'";
+                                    $run_price = $conn->query($sql_price);
+                                    while ($row_price = $run_price->fetch_array()) {
+                                        $pro_id = $row_price['p_id'];
+                                        $pro_qty = $row_price['qty'];
+                                        $pro_size = $row_price['size'];
+                                        $get_price = "SELECT * FROM products WHERE product_id = '$pro_id'";
+                                        $run_price1 = $conn->query($get_price);
+                                        while ($row_price1 = $run_price1->fetch_array()) {
+                                            $pro_img = $row_price1['product_img1'];
+                                            $pro_title = $row_price1['product_title'];
+                                            $pro_price =$row_price1['product_price'];
+                                            $subtotal = $pro_price * $pro_qty;
+                                            $total += $subtotal;
+                                            echo " <tr>
+                                                    <td><img src='admin_area/product_img/$pro_img' ></td>
+                                                    <td>{$pro_title}</td>
+                                                    <td>$pro_qty</td>
+                                                    <td>INR $pro_price</td>
+                                                    <td>$pro_size</td>
+                                                    <td><input type='checkbox' name='remove[]' value = '$pro_id'></td>
+                                                    <td>INR $subtotal</td>
+                                                </tr>";
+                                        }  
+                                   }
+                                ?>          
                             </tbody>
                             <tfoot>
+
                                 <tr>
                                     <td colspan="6">Total</td>
-                                    <td colspan="2">INR 1000</td>
+                                    <td colspan="2">INR <?php echo "$total";  ?></td>
                                 </tr>
-                            </tfoot>
+                                
+                         </tfoot>
                         </table>
                         <div class="card-footer border-0 p-0">
                             <div class="float-left">
@@ -154,64 +169,41 @@
                                 <button class="btn btn-light" type="submit" name="update">
                                     <i class="fa fa-refresh mr-1"></i>Update Card
                                 </button>
-                                <a href="index.php" class="btn btn-primary">
+                                <a href="checkout.php" class="btn btn-primary">
                                     <i class="fa fa-chevron-right mr-1"></i>Proceed To Checkout
                                 </a>
                             </div>
                         </div>
                     </form>
 
-                    <!-- like product -->
-                <div class="container-fluid mt-5">
-                    <h3 class="text-center">You Also Like These Product</h3>
-                    <div class="row">
-                         <!-- card 1 -->
-                            <div class="col-md-4 col-sm-6 my-1">
-                                <div class="card">
-                                    <img src="img/card1.png" class="card-img-top">
-                                    <div class="card-body text-center">
-                                        <h5 class="card-title "><a href="#">White Polo Shirt</a></h5>
-                                        <p class="card-text">INR 199</p>
-                                        <p class="btn-group ">
-                                          <a href="details.php" class="btn btn-outline-secondary btn-sm">View Details</a>  
-                                          <a href="#" class="btn btn-outline-primary btn-sm"><i class="fa fa-shopping-cart mr-2"></i>Add to card</a>
-                                        </p>
-                                    </div>
-                                </div>
-                            </div>
-                             <!-- card 1 -->
-                            <div class="col-md-4 col-sm-6 my-1">
-                                <div class="card">
-                                    <img src="img/card1.png" class="card-img-top">
-                                    <div class="card-body text-center">
-                                        <h5 class="card-title "><a href="#">White Polo Shirt</a></h5>
-                                        <p class="card-text">INR 199</p>
-                                        <p class="btn-group ">
-                                          <a href="details.php" class="btn btn-outline-secondary btn-sm">View Details</a>  
-                                          <a href="#" class="btn btn-outline-primary btn-sm"><i class="fa fa-shopping-cart mr-2"></i>Add to card</a>
-                                        </p>
-                                    </div>
-                                </div>
-                            </div>
-                             <!-- card 1 -->
-                            <div class="col-md-4 col-sm-6 my-1">
-                                <div class="card">
-                                    <img src="img/card1.png" class="card-img-top">
-                                    <div class="card-body text-center">
-                                        <h5 class="card-title "><a href="#">White Polo Shirt</a></h5>
-                                        <p class="card-text">INR 199</p>
-                                        <p class="btn-group ">
-                                          <a href="details.php" class="btn btn-outline-secondary btn-sm">View Details</a>  
-                                          <a href="#" class="btn btn-outline-primary btn-sm"><i class="fa fa-shopping-cart mr-2"></i>Add to card</a>
-                                        </p>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                <!-- end like product -->
-                </div>
+                    <?php 
+
+                        // $conn = mysqli_connect('localhost','root','','ecom');
+                        // global $conn;
+                        function update_card(){
+                            if (isset($_POST['update'])) {
+                                foreach ($_POST['remove'] as $remove_id) {
+                                    $id = $remove_id;
+                                  $del_pro = "DELETE FROM 'card' WHERE p_id = '$id' ";
+                                    echo "<script>alert('$remove_id')</script>"; 
+                                 $run_del = mysqli_query($conn,$del_pro);   
+                                    echo "<script>alert('$run_del')</script>"; 
+                                  if ($run_del) {
+                                     echo "<script>alert('$remove_id')</script>"; 
+                                     echo "<script>window.open('card.php','_self')</script>";
+
+                                  }else{
+                                     echo "<script>alert('$remove_id')</script>"; 
+                                     echo "<script>alert('check query')</script>"; 
+                                  }
+                                }
+                            }
+                        }
+
+                        echo @$upcard = update_card();
+                    ?>
             </div>
+        </div>
             <!-- col-2 -->
             <div class="col-md-3 pt-md-5">
                 <div class="card mt-md-5 mb-2">
@@ -226,7 +218,7 @@
                             <tbody>
                                 <tr>
                                     <td>Order Subtotal</td>
-                                    <th>INR 199</th>
+                                    <th>INR <?php echo "$total"; ?></th>
                                 </tr>
                                 <tr>
                                     <td>Shopping and Handling</td>
@@ -238,7 +230,7 @@
                                 </tr>
                                 <tr class="font-weight-bold">
                                     <td>Order Total</td>
-                                    <th>INR 199</th>
+                                    <th>INR <?php echo "$total"; ?></th>
                                 </tr>
                                
                             </tbody>
@@ -250,7 +242,38 @@
     </div>
 
 <!--######################################### Main Section End  ######################################-->
-
+  <!-- like product -->
+                <div class="container mt-5">
+                    <h3 class="text-center">You Also Like These Product</h3>
+                    <div class="row">
+                    <?php 
+                    $sql = "SELECT * FROM products ORDER BY 1 DESC LIMIT 0,4";
+                        $run = $conn->query($sql);
+                        while ($row = $run->fetch_array()) {
+                            $pro_id = $row['product_id'];
+                            $pro_title = $row['product_title'];
+                            $pro_price = $row['product_price'];
+                            $pro_img1 = $row['product_img1'];
+                            //echo $pro_id . "<br>";
+                            echo "<div class='col-md-3 col-sm-6 my-1'>
+                                <div class='card'>
+                                    <img src='admin_area/product_img/$pro_img1' class='img-fluid card-img-top'>
+                                    <div class='card-body text-center'>
+                                        <h5 class=card-title ><a href='details.php?pro_id=$pro_id'>$pro_title</a></h5>
+                                        <p class='card-text'>INR $pro_price </p>
+                                        <p class='btn-group'>
+                                          <a href='details.php?pro_id=$pro_id' class='btn btn-outline-secondary btn-sm'>View Details</a>  
+                                          <a href='details.php?pro_id=$pro_id' class='btn btn-outline-primary btn-sm'><i class='fa fa-shopping-cart mr-2'></i>Add to card</a>
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>";
+                        }
+                    ?>
+                    
+                <!-- end like product -->
+                </div>
+            </div>  
 <!--######################################### footer Start  ######################################-->
 <?php include("includes/footer.php"); ?>
 <!--######################################### footer end ######################################-->

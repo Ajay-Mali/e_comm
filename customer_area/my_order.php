@@ -19,77 +19,41 @@
 							<th>Status</th>
 				</thead>
 				<tbody>
-							<tr>
-								<td>1</td>
-								<td>199 INR</td>
-								<td>524151</td>
-								<td>1</td>
-								<td>small</td>
-								<td>2020-02-15</td>
-								<td>Unpaid</td>
-								<td><a href="confirm.php" target="_blank" class="btn btn-primary btn-sm">Confirm If Paid</a></td>
-							</tr>
-							<tr>
-								<td>1</td>
-								<td>199 INR</td>
-								<td>524151</td>
-								<td>1</td>
-								<td>small</td>
-								<td>2020-02-15</td>
-								<td>Unpaid</td>
-								<td><a href="confirm.php" target="_blank" class="btn btn-primary btn-sm">Confirm If Paid</a></td>
-							</tr>
-							<tr>
-								<td>1</td>
-								<td>199 INR</td>
-								<td>524151</td>
-								<td>1</td>
-								<td>small</td>
-								<td>2020-02-15</td>
-								<td>Unpaid</td>
-								<td><a href="confirm.php" target="_blank" class="btn btn-primary btn-sm">Confirm If Paid</a></td>
-							</tr>
-							<tr>
-								<td>1</td>
-								<td>199 INR</td>
-								<td>524151</td>
-								<td>1</td>
-								<td>small</td>
-								<td>2020-02-15</td>
-								<td>Unpaid</td>
-								<td><a href="confirm.php" target="_blank" class="btn btn-primary btn-sm">Confirm If Paid</a></td>
-							</tr>
-							<tr>
-								<td>1</td>
-								<td>199 INR</td>
-								<td>524151</td>
-								<td>1</td>
-								<td>small</td>
-								<td>2020-02-15</td>
-								<td>Unpaid</td>
-								<td><a href="confirm.php" target="_blank" class="btn btn-primary btn-sm">Confirm If Paid</a></td>
-							</tr>
-							<tr>
-								<td>1</td>
-								<td>199 INR</td>
-								<td>524151</td>
-								<td>1</td>
-								<td>small</td>
-								<td>2020-02-15</td>
-								<td>Unpaid</td>
-								<td><a href="confirm.php" target="_blank" class="btn btn-primary btn-sm">Confirm If Paid</a></td>
-							</tr>
-							<tr>
-								<td>1</td>
-								<td>199 INR</td>
-								<td>524151</td>
-								<td>1</td>
-								<td>small</td>
-								<td>2020-02-15</td>
-								<td>Unpaid</td>
-								<td><a href="confirm.php" target="_blank" class="btn btn-primary btn-sm">Confirm If Paid</a></td>
-							</tr>
-       			</tbody>
+				<?php 
+				    $s_email = $_SESSION['customer_email'];
+				    $c_run = $conn->query("SELECT * FROM customers WHERE customer_email = '$s_email'");
+				    $c_row = $c_run->fetch_assoc();
+				    $c_id = $c_row['customer_id'];
+
+				    $run_order = $conn->query(" SELECT * FROM `customer_order` WHERE customer_id = '$c_id'ORDER BY `customer_order`.`order_id` DESC");
+				    $i=1;
+				    while ($row_order = $run_order->fetch_assoc()) {
+				    	$o_date = substr($row_order['order_date'], 0,11);
+				    	$o_id = $row_order['order_id'];
+				    	$status = $row_order['order_status'];
+				    	if ($status == 'pending') {
+				    		$status = 'Unpaid';
+				    		$dis = "<a href='confirm.php?o_id=$o_id' class='btn btn-primary btn-sm' >Confirm If Paid</a>";
+				    		//
+				    	}else{
+				    		$status = 'Paid';
+				    		$dis = "<button class='btn btn-success btn-sm' disabled='' >Paid</button>";
+				    		// <a href='confirm.php?o_id=$o_id' class='btn btn-primary btn-sm' disabled="" >Confirm If Paid</a>
+				    	}
+				    	echo "<tr>
+								<td>".$i."</td>
+								<td>".$row_order['due_amount'] ." INR</td>
+								<td>".$row_order['invoice_no']."</td>
+								<td>".$row_order['qty']."</td>
+								<td>".$row_order['size']."</td>
+								<td>".$o_date."</td>
+								<td>".$status."</td>
+								<td>".$dis."</td>
+							</tr>";
+							$i++;
+				    }
+				 ?>
+ 				</tbody>
 			</table>
 		</div>
 	</div>

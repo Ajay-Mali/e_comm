@@ -4,16 +4,22 @@
             <div class="col-md-3 col-sm-6" id="f1">
                 <h4>Pages</h4>
                  <ol>
-                     <li><a href="#">Shopping card</a></li>
-                     <li><a href="#">Contact Us</a></li>
-                     <li><a href="#">Shop</a></li>
-                     <li><a href="#">My Account</a></li>
+                     <li><a href="card.php">Shopping card</a></li>
+                     <li><a href="contactus.php">Contact Us</a></li>
+                     <li><a href="shop.php">Shop</a></li>
+                     <li><a href="customer_area/my_account.php?my_order">My Account</a></li>
                  </ol>
                  <hr>
                  <h4>User Section </h4>
                  <ul>
-                     <li><a href="#">Login</a></li>
-                     <li><a href="#">Register</a></li>
+                     <li><?php
+                                    if (!isset($_SESSION['customer_email'])) {
+                                        echo "<a href='checkout.php'> Login </a>";
+                                    }else{
+                                        echo "<a href='logout.php'> Logout </a>";
+                                    }
+                                 ?></li>
+                     <li><a href="customer_registration.php">Register</a></li>
                 </ul>
                 <hr>
             </div>
@@ -22,12 +28,21 @@
             <div class="col-md-3 col-sm-6s">
                 <h4>Top Product Categories</h4>
                 <ul>
-                    <li><a href="#">Jacket</a></li>
+                    <!-- <li><a href="#">Jacket</a></li>
                     <li><a href="#">Accessories</a></li>
                     <li><a href="#">Shoes</a></li>
                     <li><a href="#">Coats</a></li>
                     <li><a href="#">T-Shirts</a></li>
-                    <li><a href="#">Pantes</a></li>
+                    <li><a href="#">Pantes</a></li> -->
+                    <?php
+                     $sql = "SELECT * FROM product_categories";
+                     $run = $conn->query($sql);
+                     while ($row = $run->fetch_array()) {
+                        $p_cat_id = $row['p_cat_id'];
+                        $p_cat_title = $row['p_cat_title'];
+                        echo "<li><a href='shop.php?pc_id=$p_cat_id'>$p_cat_title</a></li>";
+                     }
+                    ?>
                 </ul>
                 <hr class="hidden-md hidden-lg">
             </div>

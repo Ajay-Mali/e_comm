@@ -1,3 +1,8 @@
+<?php 
+    
+    require_once('includes/db.php');
+    require_once('functions/functions.php');
+ ?>
 <!DOCTYPE html>
 <html>
 <head>
@@ -27,7 +32,14 @@
                             <a href="shop.php" class="nav-link ">Shop</a>
                         </li>
                         <li class="nav-item"> 
-                            <a href="checkout" class="nav-link">My Account</a>
+                              <?php
+                            if(!isset($_SESSION['customer_email']))
+                            {
+                                echo "<a href='checkout.php' class='nav-link'>My Account</a>";
+                            }else{
+                                echo "<a href='customer_area/my_account.php?my_order' class='nav-link'>My Account</a>";
+                            }
+                          ?>
                         </li>
                         <li class="nav-item"> 
                             <a href="card.php" class="nav-link">Shopping card</a>
@@ -44,9 +56,9 @@
                      </ul>
                 </div>
                   
-                <button class="btn btn-primary btn-sm mr-sm-3">
-                    <i class="fa fa-shopping-cart"></i> <span>4 Items In Card</span>
-                </button>
+                <a href="card.php" class="btn btn-primary btn-sm mr-sm-3">
+                    <i class="fa fa-shopping-cart"></i>  <span><?php item(); ?> Items In Card</span>
+                </a>
                            
                 <button class="btn btn-primary btn-sm "  data-toggle="collapse" data-target="#search">
                     <i class="fa fa-search"></i>
@@ -87,41 +99,41 @@
                 <h2 class="">Customer Registration</h2>
             </div>
             <div class="card-body p-5">
-                <form>
+                <form method="POST" enctype="multipart/form-data">
                     <div class="form-group row">
                         <label class="col-md-2 offset-md-1">Customer Name :</label>
-                        <input type="text" name="" class="form-control col-md-9">
+                        <input type="text" name="c_name" class="form-control col-md-9" required="required">
                     </div>
                     <div class="form-group row">
                         <label class="col-md-2 offset-md-1">Customer Email :</label>
-                        <input type="email" name="" class="form-control col-md-9">
+                        <input  required="required" type="email" name="c_email" class="form-control col-md-9">
                     </div>
                     <div class="form-group row">
                         <label class="col-md-2 offset-md-1">Customer Password :</label>
-                        <input type="text" name="" class="form-control col-md-9">
+                        <input  required="required" type="Password" name="c_pass" class="form-control col-md-9">
                     </div>
                      <div class="form-group row">
                         <label class="col-md-2 offset-md-1">Country :</label>
-                        <input type="text" name="" class="form-control col-md-9">
+                        <input  required="required" type="text" name="c_country" class="form-control col-md-9">
                     </div>
                     <div class="form-group row">
                         <label class="col-md-2 offset-md-1">City :</label>
-                        <input type="text" name="" class="form-control col-md-9">
+                        <input  required="required" type="text" name="c_city" class="form-control col-md-9">
                     </div>
                     <div class="form-group row">
                         <label class="col-md-2 offset-md-1">Contact Number :</label>
-                        <input type="text" name="" class="form-control col-md-9">
+                        <input  required="required" type="text" name="c_contact" class="form-control col-md-9">
                     </div>
                     <div class="form-group row">
                         <label class="col-md-2 offset-md-1">Address :</label>
-                        <input type="text" name="" class="form-control col-md-9">
+                        <input  required="required" type="text" name="c_address" class="form-control col-md-9">
                     </div>
                      <div class="form-group row">
                         <label class="col-md-2 offset-md-1">Image :</label>
-                        <input type="file" name="" class="form-control-file col-md-9">
+                        <input  required="required" type="file" name="c_img" class="form-control-file col-md-9">
                     </div>
                     <center>
-                        <button type="submit" class="btn btn-primary mt-2">
+                        <button type="submit" name="submit" class="btn btn-primary mt-2">
                             <i class="fa fa-user mr-1"></i> Register
                         </button>
                     </center>
@@ -129,7 +141,46 @@
             </div>
         </div>
     </div>
+    <!-- php code start -->
+    <?php 
+        if (isset($_POST['submit'])) {
+             echo "<script>alert('ok')</script>";
+           $c_name = $_POST['c_name'];
+           $c_email = $_POST['c_email'];
+           $c_pass = $_POST['c_pass'];
+           $c_country = $_POST['c_country'];
+           $c_city = $_POST['c_city'];
+           $c_contact = $_POST['c_contact'];
+           $c_address = $_POST['c_address'];
+           $c_img = $_FILES['c_img']['name'];
+           $c_temp_img = $_FILES['c_img']['tmp_name'];
+           $c_ip = getUserIp();
+             
+           move_uploaded_file($c_temp_img,"customer_area/customer_img/$c_img");
 
+           // $insert = "INSERT INTO customers (customer_name , customer_email , customer_pass , customer_country , customer_city , customer_contact , customer_address , customer_img , customer_ip) VALUES ('$c_name' , '$c_email' , '$c_pass' , '$c_country' , '$c_city' , '$c_contact' , '$c_address' , '$c_img' , '$c_ip') ";
+           $insert = " INSERT INTO `customers`(`customer_name`, `customer_email`, `customer_pass`, `customer_country`, `customer_city`, `customer_contact`, `customer_address`, `customer_img`, `customer_ip`) VALUES ('$c_name' , '$c_email' , '$c_pass' , '$c_country' , '$c_city' , '$c_contact' , '$c_address' , '$c_img' , '$c_ip')";
+           mysqli_query($conn , $insert);
+           $sql = "SELECT * FROM card WHERE ip_add = '$c_ip'";
+           $run_card = $conn->query($sql);
+           $check = mysqli_num_rows($run_card);
+           if ($check > 0) {
+                $_SESSION['customer_email'] = $c_email;
+                $_SESSION['customer_name'] = $c_name;
+                 echo "<script>alert('data inserted successfully')</script>";
+              //  echo "<script>alert('you are already register ...')</script>";
+                //header('location:checkout.php');
+                  echo "<script>window.open('checkout.php','_self')</script>";
+           }else{
+                  $_SESSION['customer_email'] = $c_email;
+                  $_SESSION['customer_name'] = $c_name;
+                echo "<script>alert('data inserted successfully')</script>";
+               //  header('location:index.php');
+                echo "<script>window.open('index.php','_self')</script>";
+           }
+        }
+    ?>
+    <!-- end php code -->
 <!--######################################### Main Section End  ######################################-->
 
 <!--######################################### footer Start  ######################################-->

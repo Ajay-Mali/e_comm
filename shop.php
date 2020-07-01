@@ -1,3 +1,6 @@
+<?php require_once('includes/db.php');
+      require_once('functions/functions.php');
+ ?>
 <!DOCTYPE html>
 <html>
 <head>
@@ -27,7 +30,14 @@
                             <a href="shop.php" class="nav-link active">Shop</a>
                         </li>
                         <li class="nav-item"> 
-                            <a href="checkout" class="nav-link">My Account</a>
+                             <?php
+                            if(!isset($_SESSION['customer_email']))
+                            {
+                                echo "<a href='checkout.php' class='nav-link'>My Account</a>";
+                            }else{
+                                echo "<a href='customer_area/my_account.php?my_order' class='nav-link'>My Account</a>";
+                            }
+                          ?>
                         </li>
                         <li class="nav-item"> 
                             <a href="card.php" class="nav-link">Shopping card</a>
@@ -44,9 +54,9 @@
                      </ul>
                 </div>
                   
-                <button class="btn btn-primary btn-sm mr-sm-3">
-                    <i class="fa fa-shopping-cart"></i> <span>4 Items In Card</span>
-                </button>
+                <a href="card.php" class="btn btn-primary btn-sm mr-sm-3">
+                    <i class="fa fa-shopping-cart"></i>  <span><?php item(); ?> Items In Card</span>
+                </a>
                            
                 <button class="btn btn-primary btn-sm "  data-toggle="collapse" data-target="#search">
                     <i class="fa fa-search"></i>
@@ -77,6 +87,7 @@
 			</div>
 		</div>
 	</div>
+
 <!--######################################### short nav End  ######################################-->
 
 <!--######################################### Main Section End  ######################################-->
@@ -91,162 +102,88 @@
 			<!--############# Show section Start ##################-->
 			<div class="col-md-9">
 				<div class="container-fluid mt-md-0 my-3 p-3 shadow bg-light">
-					<!-- title  -->
-					<h3>Shop</h3>
-					<p>Bootstrap’s styling and layout can be applied to a wide range of markup structures. This documentation aims to provide developers with best practice examples to demonstrate the use of Bootstrap itself and illustrate appropriate semantic markup, including ways in which potential accessibility concerns can be addressed.</p>
+					<?php 
 
+						if (!isset($_GET['pc_id'])) {
+
+							if (!isset($_GET['c_id'])) {
+								echo "<!-- title  -->
+							<h3>Shop</h3>
+							<p>Bootstrap’s styling and layout can be applied to a wide range of markup structures. This documentation aims to provide developers with best practice examples to demonstrate the use of Bootstrap itself and illustrate appropriate semantic markup, including ways in which potential accessibility concerns can be addressed.</p>";
+							}
+						}
+					?>
+				
 					<!-- boxs -->
+
 					<div class="container" id="hotbox">
 				        <div class="row">
-				            <!-- card 1 -->
-				            <div class="col-md-4 col-sm-6  my-1">
-				                <div class="card">
-				                    <img src="img/card1.png" class="card-img-top">
-				                    <div class="card-body text-center">
-				                        <h5 class="card-title"><a href="#" id="protitle">White Polo Shirt</a></h5>
-				                        <p class="card-text">INR 199</p>
-				                        <p class="btn-group ">
-				                          <a href="details.php" class="btn btn-outline-secondary btn-sm">View Details</a>  
-				                          <a href="#" class="btn btn-outline-primary btn-sm"><i class="fa fa-shopping-cart mr-2"></i>Add to card</a>
-				                        </p>
-				                    </div>
-				                </div>
-				            </div>
-
-				            <!-- card 1 -->
-				            <div class="col-md-4 col-sm-6 my-1">
-				                <div class="card">
-				                    <img src="img/card1.png" class="card-img-top">
-				                    <div class="card-body text-center">
-				                        <h5 class="card-title "><a href="#">White Polo Shirt</a></h5>
-				                        <p class="card-text">INR 199</p>
-				                        <p class="btn-group ">
-				                          <a href="details.php" class="btn btn-outline-secondary btn-sm">View Details</a>  
-				                          <a href="#" class="btn btn-outline-primary btn-sm"><i class="fa fa-shopping-cart mr-2"></i>Add to card</a>
-				                        </p>
-				                    </div>
-				                </div>
-				            </div>
-
-				            <!-- card 1 -->
-				            <div class="col-md-4 col-sm-6 my-1">
-				                <div class="card">
-				                    <img src="img/card1.png" class="card-img-top">
-				                    <div class="card-body text-center">
-				                        <h5 class="card-title "><a href="#">White Polo Shirt</a></h5>
-				                        <p class="card-text">INR 199</p>
-				                        <p class="btn-group ">
-				                          <a href="details.php" class="btn btn-outline-secondary btn-sm">View Details</a>  
-				                          <a href="#" class="btn btn-outline-primary btn-sm"><i class="fa fa-shopping-cart mr-2"></i>Add to card</a>
-				                        </p>
-				                    </div>
-				                </div>
-				            </div>
-				            
-				            <!-- card 1 -->
-				            <div class="col-md-4 col-sm-6 my-1">
-				                <div class="card">
-				                    <img src="img/card1.png" class="card-img-top">
-				                    <div class="card-body text-center">
-				                        <h5 class="card-title "><a href="#">White Polo Shirt</a></h5>
-				                        <p class="card-text">INR 199</p>
-				                        <p class="btn-group ">
-				                          <a href="details.php" class="btn btn-outline-secondary btn-sm">View Details</a>  
-				                          <a href="#" class="btn btn-outline-primary btn-sm"><i class="fa fa-shopping-cart mr-2"></i>Add to card</a>
-				                        </p>
-				                    </div>
-				                </div>
-				            </div>
-				            
-				            <!-- card 1 -->
-				            <div class="col-md-4 col-sm-6  my-1">
-				                <div class="card">
-				                    <img src="img/card1.png" class="card-img-top">
-				                    <div class="card-body text-center">
-				                        <h5 class="card-title "><a href="#">White Polo Shirt</a></h5>
-				                        <p class="card-text">INR 199</p>
-				                        <p class="btn-group ">
-				                          <a href="details.php" class="btn btn-outline-secondary btn-sm">View Details</a>  
-				                          <a href="#" class="btn btn-outline-primary btn-sm"><i class="fa fa-shopping-cart mr-2"></i>Add to card</a>
-				                        </p>
-				                    </div>
-				                </div>
-				            </div>
-
-				            <!-- card 1 -->
-				            <div class="col-md-4 col-sm-6 my-1">
-				                <div class="card">
-				                    <img src="img/card1.png" class="card-img-top">
-				                    <div class="card-body text-center">
-				                        <h5 class="card-title "><a href="#">White Polo Shirt</a></h5>
-				                        <p class="card-text">INR 199</p>
-				                        <p class="btn-group ">
-				                          <a href="details.php" class="btn btn-outline-secondary btn-sm">View Details</a>  
-				                          <a href="#" class="btn btn-outline-primary btn-sm"><i class="fa fa-shopping-cart mr-2"></i>Add to card</a>
-				                        </p>
-				                    </div>
-				                </div>
-				            </div>
-
-				            <!-- card 1 -->
-				            <div class="col-md-4 col-sm-6 my-1">
-				                <div class="card">
-				                    <img src="img/card1.png" class="card-img-top">
-				                    <div class="card-body text-center">
-				                        <h5 class="card-title "><a href="#">White Polo Shirt</a></h5>
-				                        <p class="card-text">INR 199</p>
-				                        <p class="btn-group ">
-				                          <a href="details.php" class="btn btn-outline-secondary btn-sm">View Details</a>  
-				                          <a href="#" class="btn btn-outline-primary btn-sm"><i class="fa fa-shopping-cart mr-2"></i>Add to card</a>
-				                        </p>
-				                    </div>
-				                </div>
-				            </div>
-				            
-				            <!-- card 1 -->
-				            <div class="col-md-4 col-sm-6 my-1">
-				                <div class="card">
-				                    <img src="img/card1.png" class="card-img-top">
-				                    <div class="card-body text-center">
-				                        <h5 class="card-title "><a href="#">White Polo Shirt</a></h5>
-				                        <p class="card-text">INR 199</p>
-				                        <p class="btn-group ">
-				                          <a href="details.php" class="btn btn-outline-secondary btn-sm">View Details</a>  
-				                          <a href="#" class="btn btn-outline-primary btn-sm"><i class="fa fa-shopping-cart mr-2"></i>Add to card</a>
-				                        </p>
-				                    </div>
-				                </div>
-				            </div>
-
-				             <!-- card 1 -->
-				            <div class="col-md-4 col-sm-6 my-1">
-				                <div class="card">
-				                    <img src="img/card1.png" class="card-img-top">
-				                    <div class="card-body text-center">
-				                        <h5 class="card-title "><a href="#">White Polo Shirt</a></h5>
-				                        <p class="card-text">INR 199</p>
-				                        <p class="btn-group ">
-				                          <a href="details.php" class="btn btn-outline-secondary btn-sm">View Details</a>  
-				                          <a href="#" class="btn btn-outline-primary btn-sm"><i class="fa fa-shopping-cart mr-2"></i>Add to card</a>
-				                        </p>
-				                    </div>
-				                </div>
-				            </div>
+				        	<?php 
+						if (!isset($_GET['pc_id'])) {
+							if (!isset($_GET['c_id'])) {
+								$per_page = 6;
+								if (isset($_GET['page'])) {
+									$page=$_GET['page'];
+								}else{
+									$page=1;
+								}
+								$Start_from = ($page-1) * $per_page;
+								$get_pro = "SELECT * FROM products ORDER BY 1 DESC LIMIT $Start_from,$per_page";
+								$run = $conn->query($get_pro);
+									while ($row = $run->fetch_array()) {
+										$pro_id = $row['product_id'];
+										$pro_title = $row['product_title'];
+										$pro_price = $row['product_price'];
+										$pro_img1 = $row['product_img1'];
+										//echo $pro_id . "<br>";
+										echo "<div class='col-md-4 col-sm-6 my-1'>
+							                <div class='card'>
+							                    <img src='admin_area/product_img/$pro_img1' class='img-fluid card-img-top'>
+							                    <div class='card-body text-center'>
+							                        <h5 class=card-title ><a href='details.php?pro_id=$pro_id'>$pro_title</a></h5>
+							                        <p class='card-text'>INR $pro_price </p>
+							                        <p class='btn-group'>
+							                          <a href='details.php?pro_id=$pro_id' class='btn btn-outline-secondary btn-sm'>View Details</a>  
+							                          <a href='details.php?pro_id=$pro_id' class='btn btn-outline-primary btn-sm'><i class='fa fa-shopping-cart mr-2'></i>Add to card</a>
+							                        </p>
+							                    </div>
+							                </div>
+							            </div>";
+									}
+						
+					?>
+				           
 						</div> <!-- row end  -->
 
 						<!-- pagination -->
 						<nav aria-label="Page navigation ">
 							<ul class="pagination justify-content-center mt-4 ">
-								<li class="page-item "><a class="page-link  text-dark" href="shop.php">First Page</a></li>
-								<li class="page-item"><a class="page-link text-dark" href="#">1</a></li>
-								<li class="page-item"><a class="page-link text-dark" href="#">2</a></li>
-								<li class="page-item"><a class="page-link text-dark" href="#">3</a></li>
-								<li class="page-item"><a class="page-link text-dark" href="#">4</a></li>
-								<li class="page-item"><a class="page-link text-dark" href="#">Last Page</a></li>		
+							<?php
+									$sql = "SELECT * FROM products";
+									$runq = $conn->query($sql);
+									$t_record = mysqli_num_rows($runq);
+									$t_pages = ceil($t_record/$per_page);
+									echo "<li class='page-item'><a class='page-link text-dark' href='shop.php?page=1'>First Page</a></li>";
+									for ($i=1; $i <= $t_pages; $i++) { 
+										echo "<li class='page-item'><a class='page-link text-dark' href='shop.php?page=".$i."'>".$i."</a></li>";
+									}
+									echo "<li class='page-item'><a class='page-link text-dark' href='shop.php?page=$per_page'>Last Page</a></li>";
+									}
+								}
+							?>
+
+			
+
+							
 							</ul>
 						</nav>
 
-
+						<div class="row container-fluid mt-md-0 my-3 p-3 ">
+							<?php
+								Get_P_cat_pro();
+								Get_cat_pro();
+							?>
+						</div>
 					</div>
 				</div>
 			</div>

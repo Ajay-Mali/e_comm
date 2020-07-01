@@ -1,3 +1,6 @@
+<?php require_once('includes/db.php');
+      require_once('functions/functions.php');
+ ?>
 <!DOCTYPE html>
 <html>
 <head>
@@ -27,7 +30,14 @@
                             <a href="shop.php" class="nav-link ">Shop</a>
                         </li>
                         <li class="nav-item"> 
-                            <a href="checkout" class="nav-link">My Account</a>
+                             <?php
+                            if(!isset($_SESSION['customer_email']))
+                            {
+                                echo "<a href='checkout.php' class='nav-link'>My Account</a>";
+                            }else{
+                                echo "<a href='customer_area/my_account.php?my_order' class='nav-link'>My Account</a>";
+                            }
+                          ?>
                         </li>
                         <li class="nav-item"> 
                             <a href="card.php" class="nav-link">Shopping card</a>
@@ -44,9 +54,9 @@
                      </ul>
                 </div>
                   
-                <button class="btn btn-primary btn-sm mr-sm-3">
-                    <i class="fa fa-shopping-cart"></i> <span>4 Items In Card</span>
-                </button>
+                <a href="card.php" class="btn btn-primary btn-sm mr-sm-3">
+                    <i class="fa fa-shopping-cart"></i>  <span><?php item(); ?> Items In Card</span>
+                </a>
                            
                 <button class="btn btn-primary btn-sm "  data-toggle="collapse" data-target="#search">
                     <i class="fa fa-search"></i>
@@ -74,25 +84,25 @@
                 <p class="text-muted">if you have any questions please feel free to contact us. Our customer service center is working for you 7/24 </p>
             </div>
             <div class="card-body p-5">
-                <form>
+                <form method="POST">
                     <div class="form-group row">
                         <label class="col-md-2 offset-md-1">Name :</label>
-                        <input type="text" name="" class="form-control col-md-9">
+                        <input type="text" name="name" class="form-control col-md-9">
                     </div>
                     <div class="form-group row">
                         <label class="col-md-2 offset-md-1">Email :</label>
-                        <input type="email" name="" class="form-control col-md-9">
+                        <input type="email" name="email" class="form-control col-md-9">
                     </div>
                     <div class="form-group row">
                         <label class="col-md-2 offset-md-1">Subject :</label>
-                        <input type="text" name="" class="form-control col-md-9">
+                        <input type="text" name="subject" class="form-control col-md-9">
                     </div>
                     <div class="form-group row">
                         <label class="col-md-2 offset-md-1">Message :</label>
-                        <textarea class="form-control col-md-9" ></textarea>
+                        <textarea class="form-control col-md-9" name="mess" ></textarea>
                     </div>
                     <center>
-                        <button type="submit" class="btn btn-primary mt-2">
+                        <button type="submit" class="btn btn-primary mt-2" name="submit">
                             <i class="fa fa-user-md"></i> Send Message
                         </button>
                     </center>
@@ -100,6 +110,28 @@
             </div>
         </div>
     </div>
+
+    <?php
+        if (isset($_POST['submit'])) {
+            // admin email
+            $s_name = $_POST['name'];
+            $s_email = $_POST['email'];
+            $s_subject = $_POST['subject'];
+            $s_mess = $_POST['mess'];
+            $r_email = 'ajmaking02016@gmail.com';
+
+            mail( $r_email,$s_name,$s_subject,$s_mess,$s_email);
+
+            //customer email
+            $s_email = $_POST['email'];
+            $r_subject = "Welcome To Our Website ";
+            $r_mess = "I Shall Get you soon, Thanks for sending email";
+
+            mail( $s_email, $r_subject, $r_mess, $r_email);
+
+            echo "<h2 align = 'center'>Your E-mail Sent..</h2>";
+           }
+    ?>
 <!--######################################### Main Section End  ######################################-->
 
 <!--######################################### footer Start  ######################################-->

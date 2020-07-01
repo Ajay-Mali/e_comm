@@ -1,8 +1,14 @@
+
 <!DOCTYPE html>
 <html>
     <head>
         <title>E commerce Store</title>
         <?php include('includes/csslinks.php') ?>
+        <?php 
+            if (!isset($_SESSION['customer_email'])) {
+                echo "<script>window.open('../checkout.php','_self')</script>";
+            }else{
+        ?>
     </head>
     <body>
   <!--######################################### Top Bar Start  ######################################-->
@@ -12,8 +18,8 @@
 <!--######################################### Menu Bar Start  ######################################-->
         <div class="container-fluid">
             <nav class="navbar navbar-expand-lg navbar-light bg-light shadow">
-                <a href="index.php" class="navbar-brand" style="text-decoration: none;">
-                    <img src="img/brand.png" class="img-fluid">
+                <a href="../index.php" class="navbar-brand" style="text-decoration: none;">
+                    <img src="customer_img/brand.png" class="img-fluid">
                 </a>
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" >
                     <span class="navbar-toggler-icon"></span>
@@ -27,7 +33,14 @@
                             <a href="../shop.php" class="nav-link">Shop</a>
                         </li>
                         <li class="nav-item"> 
-                            <a href="my_account.php" class="nav-link">My Account</a>
+                            <?php
+                            if(!isset($_SESSION['customer_email']))
+                            {
+                                echo "<a href='checkout.php' class='nav-link'>My Account</a>";
+                            }else{
+                                echo "<a href='my_account.php?my_order' class='nav-link'>My Account</a>";
+                            }
+                          ?>
                         </li>
                         <li class="nav-item"> 
                             <a href="../card.php" class="nav-link">Shopping card</a>
@@ -44,9 +57,9 @@
                      </ul>
                 </div>
                   
-                <button class="btn btn-primary btn-sm mr-sm-3">
-                    <i class="fa fa-shopping-cart"></i> <span>4 Items In Card</span>
-                </button>
+                <a href="../card.php" class="btn btn-primary btn-sm mr-sm-3">
+                    <i class="fa fa-shopping-cart"></i>  <span><?php item(); ?> Items In Card</span>
+                </a>
                            
                 <button class="btn btn-primary btn-sm "  data-toggle="collapse" data-target="#search">
                     <i class="fa fa-search"></i>
@@ -137,3 +150,4 @@
        </script>
     </body>
 </html>
+<?php } ?>

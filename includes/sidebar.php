@@ -1,4 +1,4 @@
-
+ 
 <!--######################################### product categoried Start  ######################################-->
 <div class="container">
 	<div class="card shadow">
@@ -7,10 +7,13 @@
 		</div>
 		<div class="card-body">
 			<ul class="list-group">
-				<li class="list-group-item"><a href="#">Jackets</a></li>
+				<!-- <li class="list-group-item"><a href="#">Jackets</a></li>
 				<li class="list-group-item"><a href="#">Shoes</a></li>
 				<li class="list-group-item"><a href="#">Coats</a></li>
-				<li class="list-group-item"><a href="#">T-shirts</a></li>
+				<li class="list-group-item"><a href="#">T-shirts</a></li> -->
+				<?php 
+					Get_P_cat();
+				?>
 			</ul>
 		</div>
 	</div>
@@ -25,10 +28,13 @@
 		</div>
 		<div class="card-body">
 			<ul class="list-group ">
-				<li class="list-group-item"><a href="#">Men</a></li>
+				<!-- <li class="list-group-item"><a href="#">Men</a></li>
 				<li class="list-group-item"><a href="#">Women</a></li>
 				<li class="list-group-item"><a href="#">Kids</a></li>
-				<li class="list-group-item"><a href="#">Other</a></li>
+				<li class="list-group-item"><a href="#">Other</a></li> -->
+				<?php 
+					Get_cat();
+				?>
 			</ul>
 		</div>
 	</div>
