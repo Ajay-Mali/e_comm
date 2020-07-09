@@ -16,7 +16,7 @@
 			$run_pro = $conn->query("SELECT * FROM products WHERE product_id = '$pro_id'");
 			while ($row_pro = $run_pro->fetch_assoc()) {
 				$total = $row_pro['product_price'] * $qty;
-				$conn->query("INSERT INTO `customer_order`(`customer_id`, `due_amount`, `invoice_no`, `qty`, `size`, `order_date`, `order_status`) VALUES ('$c_id','$total','$invoice_no','$qty','$size',NOW(),'$status')");
+				$conn->query("INSERT INTO `customer_order`(`customer_id`,'product_id',`due_amount`, `invoice_no`, `qty`, `size`, `order_date`, `order_status`,'admin_status') VALUES ('$c_id','$pro_id','$total','$invoice_no','$qty','$size',NOW(),'$status','$status')");
 				// $conn->query("INSERT INTO `pending_order`(`customer_id`, `invoice_on`, `product_id`, `qty`, `size`, `order_status`) VALUES ('$c_id','$invoice_no','$pro_id','$qty','$size','$status')");
 				$conn->query("DELETE FROM card WHERE ip_add = '$ip_add'");
 

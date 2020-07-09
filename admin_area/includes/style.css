@@ -1,0 +1,96 @@
+
+/************************************ Admin Panel  *******************************************/
+body{
+     margin: 0;
+     padding: 0;
+}
+    nav{
+        position: fixed;
+    }
+    #side-nav > li{
+        padding: 5px 10px;
+    }
+    #side-nav > li > a{
+        text-decoration: none;
+        color: white;
+    }
+
+    #side-nav>li:hover , focus{
+        outline: 0;
+        background-color: black;
+    }
+    #side-nav > li > ul{
+       padding: 0;
+     /* background-color: red;*/
+    }
+    #side-nav > li > ul > li {
+        color: white;
+        padding: 0;
+        text-decoration: none;
+        background-color: #999;
+    }
+
+    #side-nav > li > ul > li >a{
+        color: white;
+      /*  padding: 10px 15px 10px 38px;*/
+        text-decoration: none;
+        
+    }
+
+    /*88888888888888888888888*/
+@media (min-width: 760px ) {
+    .navbar-fixed-top{
+        padding-left: 0px;
+    }
+    nav #side-nav{
+        position: fixed;
+        padding-left: 0;
+        margin-left:0;
+        top: 59px;
+        width: 15%;
+        border-radius: 0;
+        overflow-y: auto;
+        overflow-x: hidden;
+        background-color: #999;
+        bottom: 0;
+       /* color: red;*/
+        padding-bottom: 40px;
+    }
+   /* #side-nav > li >a{
+        padding-top: 13px;
+        padding-bottom: 12px;
+    }*/
+    #side-nav > li > a{
+        width: 255px;
+        padding-top: 15px;
+        padding-bottom: 15px;
+        font-size: 20px;
+        padding-left: 0;
+        padding-right: 0;
+        text-decoration: none;
+        color: white;
+    }
+   /* #side-nav li:hover , focus{
+        outline: 0;
+        background-color: black;
+    }*/
+    #side-nav > li > ul{
+       padding: 0;
+     /* background-color: red;*/
+    }
+    #side-nav > li > ul > li {
+        color: white;
+        font-size: 20px;
+        padding-left:38px;
+        text-decoration: none;
+        background-color: black;
+    
+    }
+     #side-nav > li > ul > li:hover , focus{
+        background-color: #999;
+     }
+     .main_div{
+        margin-left: 16%;
+     }
+}
+/************************************ End Admin Panel *******************************************/

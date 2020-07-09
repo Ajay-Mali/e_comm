@@ -1,4 +1,4 @@
-<div class="container">
+	<div class="container">
 	<div class="card">
 		<div class="card-header">
 			<center>
@@ -25,20 +25,20 @@
 				    $c_row = $c_run->fetch_assoc();
 				    $c_id = $c_row['customer_id'];
 
-				    $run_order = $conn->query(" SELECT * FROM `customer_order` WHERE customer_id = '$c_id'ORDER BY `customer_order`.`order_id` DESC");
+				    $run_order = $conn->query(" SELECT * FROM customer_order WHERE customer_id = '$c_id'");
 				    $i=1;
 				    while ($row_order = $run_order->fetch_assoc()) {
-				    	$o_date = substr($row_order['order_date'], 0,11);
+				    	$o_date = $row_order['order_date'];
 				    	$o_id = $row_order['order_id'];
 				    	$status = $row_order['order_status'];
 				    	if ($status == 'pending') {
 				    		$status = 'Unpaid';
 				    		$dis = "<a href='confirm.php?o_id=$o_id' class='btn btn-primary btn-sm' >Confirm If Paid</a>";
-				    		//
+				    		
 				    	}else{
 				    		$status = 'Paid';
 				    		$dis = "<button class='btn btn-success btn-sm' disabled='' >Paid</button>";
-				    		// <a href='confirm.php?o_id=$o_id' class='btn btn-primary btn-sm' disabled="" >Confirm If Paid</a>
+				    		
 				    	}
 				    	echo "<tr>
 								<td>".$i."</td>
